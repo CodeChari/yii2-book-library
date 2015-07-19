@@ -10,7 +10,11 @@ return [
     'id' => 'app-admin',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'admin\controllers',
-    'bootstrap' => ['log'],
+    'language' => 'sk',
+    'bootstrap' => [
+        'log',
+        'common\models\settings'
+    ],
     'modules' => [],
     'components' => [
         'user' => [
@@ -28,6 +32,18 @@ return [
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
+        ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/messages', //__DIR__ . '/../../common/messages'
+                    //'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'app' => 'app.php'
+                    ],
+                ],
+            ],
         ],
     ],
     'params' => $params,

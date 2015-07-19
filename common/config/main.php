@@ -12,5 +12,18 @@ return [
             'password' => '123456',
             'charset' => 'utf8',
         ],
+        'urlManager' => [
+            'class' => 'yii\web\UrlManager',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+        ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'dateFormat' => 'php:d.m.Y',
+            'datetimeFormat' => 'php:d.m.Y H:i',
+            'timeFormat' => 'php:H:i:s',
+            'defaultTimeZone' => 'Europe/Vienna',//UTC
+            'timeZone' => 'Europe/Vienna',
+        ],
     ],
 ];
