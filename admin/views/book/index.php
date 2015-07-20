@@ -7,10 +7,14 @@ use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel admin\models\BookSearch */
+/* @var $model admin\models\Book */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Books');
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->params['allTypes'] = $allTypes;
+$this->params['allStatuses'] = $allStatuses;
 ?>
 <div class="book-index">
 
@@ -30,15 +34,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
             [
                 'attribute' => 'name',
-//                'label' => 'Book name',
-                'value' => function ($model) {
+                'value' => function ($model, $id) {
                     return Html::a($model->name, Url::to(['book/view', 'id' => $model->id]));
                 },
                 'format' => 'html',
@@ -52,8 +55,20 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'publisher_id',
             //'library_id',
             //TODO: ako dostat data z controlera do 'value' - parametrea funkcie
-            'type_id',
-            'status_id',
+            [
+                'attribute' => 'type_id',
+                'value' => function($model){
+                    return $this->params['allTypes'][$model->type_id];
+                },
+            ],
+//            'type_id',
+            [
+                'attribute' => 'status_id',
+                'value' => function($model){
+                    return $this->params['allStatuses'][$model->status_id];
+                },
+            ],
+//            'status_id',
             // 'edition',
             // 'description:ntext',
             // 'last_update',

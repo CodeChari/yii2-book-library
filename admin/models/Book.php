@@ -4,6 +4,8 @@ namespace admin\models;
 
 use Isbn\Isbn;
 use Yii;
+use yii\db\Expression;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "book".
@@ -90,6 +92,19 @@ class Book extends \yii\db\ActiveRecord
         ];
     }
 
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => false,//TODO: vlozit to book modelu aj created_at stlpec !!!
+                'updatedAtAttribute' => 'last_update',
+                'value' => new Expression('NOW()'),
+
+            ],
+        ];
+    }
     /**
      * strip HTML and php tags
      * @return string
@@ -130,12 +145,12 @@ class Book extends \yii\db\ActiveRecord
             'page_count' => Yii::t('app', 'Page Count'),
             'isbn' => Yii::t('app', 'Isbn'),
             'issn' => Yii::t('app', 'Issn'),
-            'language_id' => Yii::t('app', 'Language ID'),
-            'library_id' => Yii::t('app', 'Library ID'),
-            'publisher_id' => Yii::t('app', 'Publisher ID'),
-            'type_id' => Yii::t('app', 'Type ID'),
-            'status_id' => Yii::t('app', 'Status ID'),
-            'category_id' => Yii::t('app', 'Category ID'),
+            'language_id' => Yii::t('app', 'Language'),
+            'library_id' => Yii::t('app', 'Library'),
+            'publisher_id' => Yii::t('app', 'Publisher'),
+            'type_id' => Yii::t('app', 'Type'),
+            'status_id' => Yii::t('app', 'Status'),
+            'category_id' => Yii::t('app', 'Category'),
             'edition' => Yii::t('app', 'Edition'),
             'description' => Yii::t('app', 'Description'),
             'last_update' => Yii::t('app', 'Last Update'),
@@ -150,12 +165,21 @@ class Book extends \yii\db\ActiveRecord
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
+    public function getCategoryName()
+    {
+        return $this->getCategory()->asArray()->one()['category_name'];
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getLanguage()
     {
         return $this->hasOne(Language::className(), ['id' => 'language_id']);
+    }
+
+    public function getLanguageName()
+    {
+        return $this->getLanguage()->asArray()->one()['name'];
     }
 
     /**
@@ -174,6 +198,11 @@ class Book extends \yii\db\ActiveRecord
         return $this->hasOne(Publisher::className(), ['id' => 'publisher_id']);
     }
 
+    public function getPublisherName()
+    {
+        return $this->getPublisher()->asArray()->one()['name'];
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -182,12 +211,21 @@ class Book extends \yii\db\ActiveRecord
         return $this->hasOne(Status::className(), ['id' => 'status_id']);
     }
 
+    public function getStatusName()
+    {
+        return Yii::t('app', $this->getStatus()->asArray()->one()['status']);
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getType()
     {
         return $this->hasOne(Type::className(), ['id' => 'type_id']);
+    }
+
+    public function getTypeName()
+    {
+        return Yii::t('app', $this->getType()->asArray()->one()['type']);
     }
 
     /**
@@ -204,23 +242,6 @@ class Book extends \yii\db\ActiveRecord
     public function getAuthors()
     {
         return $this->hasMany(Author::className(), ['id' => 'author_id'])->viaTable('book_author', ['book_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBookCategories()
-    {
-        return $this->hasMany(BookCategory::className(), ['book_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategories()
-    {
-        return $this->hasMany(Category::className(), ['id' => 'category_id'])->viaTable('book_category',
-            ['book_id' => 'id']);
     }
 
     /**

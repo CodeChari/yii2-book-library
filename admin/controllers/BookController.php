@@ -64,7 +64,8 @@ class BookController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'test' => 'test'
+            'allTypes' => (new Type())->getTypeNameArray(),
+            'allStatuses' => (new Status())->getStatusNameArray(),
         ]);
     }
 
@@ -81,10 +82,11 @@ class BookController extends Controller
         return $this->render('view', [
             'modelBook' => $modelBook,
             'authors' => $modelBookForm->getAuthors(),
-            'language' => $modelBook->getLanguage()->asArray()->one(),
-            'publisher' => $modelBook->getPublisher()->asArray()->one(),
-            'type' => $modelBook->getType()->asArray()->one(),
-            'status' => $modelBook->getStatus()->asArray()->one(),
+            'language' => $modelBook->getLanguageName(),
+            'publisher' => $modelBook->getPublisherName(),
+            'type' => $modelBook->getTypeName(),
+            'status' => $modelBook->getStatusName(),
+            'category' => $modelBook->getCategoryName(),
             'keyWords' => $modelBookForm->getKeyWords(),
 
         ]);
@@ -176,6 +178,7 @@ class BookController extends Controller
 
             if ($valid && $modelBookForm->updateBook($modelsAuthor, $modelsAuthorNew, $modelsKeyWordsNew)) {
                 Yii::$app->session->setFlash('success', Yii::t('app', Yii::t('app', 'Book was updated successfully.')));
+
                 return $this->redirect(['view', 'id' => $modelBook->id]);
             } else {
                 //get all errors from multiple models
@@ -198,6 +201,7 @@ class BookController extends Controller
             'typeDropDownList' => BookForm::createArrayMap(Type::className(), 'id', 'type'),
             'statusDropDownList' => BookForm::createArrayMap(Status::className(), 'id', 'status'),
             'libraryDropDownList' => BookForm::createArrayMap(Library::className(), 'id', 'name'),
+            'categoryDropDownList' => BookForm::createArrayMap(Category::className(), 'id', 'category_name'),
             'keyWords' => $modelBookForm->getKeyWords(),
         ]);
     }
@@ -214,6 +218,7 @@ class BookController extends Controller
         $book->status_id = Yii::$app->params['status']['deleted'];
         $book->update(false);
         Yii::$app->session->addFlash('success', Yii::t('app', 'Book was deleted successfully.'));
+
         return $this->redirect(['index']);
     }
 

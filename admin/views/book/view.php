@@ -14,8 +14,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
+    <div class="pull-left">
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $modelBook->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Back'), Yii::$app->request->referrer ? Yii::$app->request->referrer : ['index'],
+            ['class' => 'btn']) ?>
+    </div>
+    <div class="pull-right">
         <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $modelBook->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -31,7 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-    </p>
+    </div>
+    <br><br><br>
 
     <?= ''/*DetailView::widget([
         'model' => $modelBook,
@@ -49,60 +54,66 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:ntext',
             'last_update',
         ],
-    ]) */?>
+    ]) */ ?>
 
-    <table class="table table-striped table-bordered detail-view" >
+    <table class="table table-striped table-bordered detail-view">
         <tr>
             <th><?= Yii::t('app', 'Book name') ?></th>
-            <td><?= $modelBook->name ?></td>
+            <td><?= Html::encode($modelBook->name) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Author') ?></th>
-            <td><?= $authors ?></td>
+            <td><?= Html::encode($authors) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Internal ID') ?></th>
-            <td><?= $modelBook->internal_id ?></td>
+            <td><?= Html::encode($modelBook->internal_id) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'ISBN') ?></th>
-            <td><?= $modelBook->isbn ?></td>
+            <td><?= Html::encode($modelBook->isbn) ?></td>
         </tr>
-        <tr>
-            <th><?= Yii::t('app', 'ISSN') ?></th>
-            <td><?= $modelBook->issn ?></td>
-        </tr>
+        <?php if (!empty($modelBook->issn)) { ?>
+            <tr>
+                <th><?= Yii::t('app', 'ISSN') ?></th>
+                <td><?= Html::encode($modelBook->issn) ?></td>
+            </tr>
+        <?php } ?>
         <tr>
             <th><?= Yii::t('app', 'Pages') ?></th>
-            <td><?= $modelBook->page_count ?></td>
+            <td><?= Html::encode($modelBook->page_count) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Language') ?></th>
-            <td><?= $language['name'] ?></td>
+            <td><?= $language ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Publisher') ?></th>
-            <td><?= $publisher['name'] ?></td>
+            <td><?= Html::encode($publisher) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Type') ?></th>
-            <td><?= $type['type'] ?></td>
+            <td><?= $type ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Status') ?></th>
-            <td><?= $status['status'] ?></td>
+            <td><?= $status ?></td>
+        </tr>
+        <tr>
+            <th><?= Yii::t('app', 'Category') ?></th>
+            <td><?= Html::encode($category) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Edition') ?></th>
-            <td><?= $modelBook->edition ?></td>
+            <td><?= Html::encode($modelBook->edition) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Key Words') ?></th>
-            <td><?= $keyWords ?></td>
+            <td><?= Html::encode($keyWords) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Description') ?></th>
-            <td><?= $modelBook->description ?></td>
+            <td><?= Html::encode($modelBook->description) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Last update') ?></th>

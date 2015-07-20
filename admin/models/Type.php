@@ -3,6 +3,7 @@
 namespace admin\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "type".
@@ -53,5 +54,15 @@ class Type extends \yii\db\ActiveRecord
     public function getBooks()
     {
         return $this->hasMany(Book::className(), ['type_id' => 'id']);
+    }
+
+    public function getTypeNameArray()
+    {
+        $allTypes = Type::find()->select(['id', 'type'])->asArray()->all();
+        $map = ArrayHelper::map($allTypes, 'id', 'type');
+        foreach ($map as &$m) {
+            $m = Yii::t('app', $m);
+        }
+        return $map;
     }
 }

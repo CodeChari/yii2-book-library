@@ -34,7 +34,7 @@ class KeyWord extends \yii\db\ActiveRecord
             [['word'], 'required'],
             ['word', 'stripTags'],
             [['last_update'], 'safe'],
-            [['word'], 'string', 'max' => 1]
+            [['word'], 'string', 'max' => 45]
         ];
     }
 

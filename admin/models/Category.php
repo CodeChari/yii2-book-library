@@ -3,6 +3,8 @@
 namespace admin\models;
 
 use Yii;
+use yii\db\Expression;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "category".
@@ -21,6 +23,19 @@ class Category extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'category';
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => false,//TODO: vlozit to book modelu aj created_at stlpec !!!
+                'updatedAtAttribute' => 'last_update',
+                'value' => new Expression('NOW()'),
+
+            ],
+        ];
     }
 
     /**

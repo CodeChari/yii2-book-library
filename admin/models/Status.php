@@ -3,6 +3,7 @@
 namespace admin\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "status".
@@ -53,5 +54,15 @@ class Status extends \yii\db\ActiveRecord
     public function getBooks()
     {
         return $this->hasMany(Book::className(), ['status_id' => 'id']);
+    }
+
+    public function getStatusNameArray()
+    {
+        $allStats = Status::find()->select(['id', 'status'])->asArray()->all();
+        $map = ArrayHelper::map($allStats, 'id', 'status');
+        foreach ($map as &$m) {
+            $m = Yii::t('app', $m);
+        }
+        return $map;
     }
 }

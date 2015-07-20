@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model admin\models\Book */
+/* @var $modelBook admin\models\Book */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -55,10 +55,12 @@ use yii\widgets\ActiveForm;
                             ?>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <?= $form->field($modelAuthor, "[{$i}]first_name")->textInput(['maxlength' => true]) ?>
+                                    <?= $form->field($modelAuthor,
+                                        "[{$i}]first_name")->textInput(['maxlength' => true]) ?>
                                 </div>
                                 <div class="col-sm-6">
-                                    <?= $form->field($modelAuthor, "[{$i}]last_name")->textInput(['maxlength' => true]) ?>
+                                    <?= $form->field($modelAuthor,
+                                        "[{$i}]last_name")->textInput(['maxlength' => true]) ?>
                                 </div>
                             </div>
                         </div>
@@ -75,48 +77,34 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($modelBook, 'page_count')->textInput() ?>
 
-        <div class="form-group required">
-            <label class="control-label" for="book-language"><?= Yii::t('app', 'Language') ?></label>
-            <?= Html::dropDownList('Book[language_id]', null, $languageDropDownList, ['id' => 'book-language', 'class' => 'form-control']) ?>
-        </div>
+        <?= $form->field($modelBook, 'language_id')->dropDownList($languageDropDownList) ?>
 
-        <div class="form-group required">
-            <label class="control-label" for="book-publisher"><?= Yii::t('app', 'Publisher') ?></label>
-            <?= Html::dropDownList('Book[publisher_id]', null, $publisherDropDownList, ['id' => 'book-publisher', 'class' => 'form-control']) ?>
-        </div>
+        <?= $form->field($modelBook, 'publisher_id')->dropDownList($publisherDropDownList) ?>
 
-        <div class="form-group required">
-            <label class="control-label" for="book-type"><?= Yii::t('app', 'Type') ?></label>
-            <?= Html::dropDownList('Book[type_id]', null, $typeDropDownList, ['id' => 'book-type', 'class' => 'form-control']) ?>
-        </div>
+        <?= $form->field($modelBook, 'type_id')->dropDownList( $typeDropDownList) ?>
 
-        <div class="form-group required">
-            <label class="control-label" for="book-type"><?= Yii::t('app', 'Status') ?></label>
-            <?= Html::dropDownList('Book[status_id]', null, $statusDropDownList, ['id' => 'book-status', 'class' => 'form-control']) ?>
-        </div>
+        <?= $form->field($modelBook, 'status_id')->dropDownList($statusDropDownList) ?>
 
-        <div class="form-group required">
-            <label class="control-label" for="book-type"><?= Yii::t('app', 'Category') ?></label>
-            <?= Html::dropDownList('Book[category_id]', null, $categoryDropDownList, ['id' => 'book-category', 'class' => 'form-control']) ?>
-        </div>
+        <?= $form->field($modelBook, 'category_id')->dropDownList($categoryDropDownList) ?>
 
-        <div class="form-group required">
-            <label class="control-label" for="book-type"><?= Yii::t('app', 'Library') ?></label>
-            <?= Html::dropDownList('Book[library_id]', null, $libraryDropDownList, ['id' => 'book-status', 'class' => 'form-control']) ?>
-        </div>
+        <?= $form->field($modelBook, 'library_id')->dropDownList($libraryDropDownList) ?>
 
         <?= $form->field($modelBook, 'edition')->textInput() ?>
 
         <div class="form-group">
-            <label class="control-label" for="book-key-words"><?= Yii::t('app', 'Key Words') .' (' . Yii::t('app', 'Comma separated') .')' ?></label>
-            <?= Html::textInput('KeyWord[words]', isset($keyWords) ? $keyWords : null, ['id' => 'book-key-words', 'class' => 'form-control']) ?>
+            <label class="control-label" for="book-key-words"><?= Yii::t('app', 'Key Words') . ' (' . Yii::t('app',
+                    'Comma separated') . ')' ?></label>
+            <?= Html::textInput('KeyWord[words]', isset($keyWords) ? $keyWords : null,
+                ['id' => 'book-key-words', 'class' => 'form-control']) ?>
         </div>
 
         <?= $form->field($modelBook, 'description')->textarea(['rows' => 6]) ?>
 
 
         <div class="form-group">
-            <?= Html::submitButton($modelBook->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $modelBook->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            <?= Html::submitButton($modelBook->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'),
+                ['class' => $modelBook->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            <?= Html::a(Yii::t('app', 'Cancel'), Yii::$app->request->referrer ? Yii::$app->request->referrer : ['index'], ['class' => 'btn']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
