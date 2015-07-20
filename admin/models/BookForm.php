@@ -171,7 +171,6 @@ class BookForm
     public function updateBook($modelsAuthor, &$modelsAuthorNew, &$modelsKeyWordsNew)
     {
         $db = \Yii::$app->db;
-//        $this->modelBook->last_update = \Yii::$app->formatter->as (strtotime('now'));
         $transaction = $db->beginTransaction();
         try {
             if ($flag = $this->modelBook->save(false)) {

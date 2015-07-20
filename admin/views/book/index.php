@@ -38,7 +38,6 @@ $this->params['allStatuses'] = $allStatuses;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            //'id',
             [
                 'attribute' => 'name',
                 'value' => function ($model, $id) {
@@ -47,13 +46,8 @@ $this->params['allStatuses'] = $allStatuses;
                 'format' => 'html',
                 //'search' => true,
             ],
-            //'name:url',
-            //'page_count',
             'isbn',
             'issn',
-            // 'language_id',
-            // 'publisher_id',
-            //'library_id',
             //TODO: ako dostat data z controlera do 'value' - parametrea funkcie
             [
                 'attribute' => 'type_id',
@@ -61,25 +55,19 @@ $this->params['allStatuses'] = $allStatuses;
                     return $this->params['allTypes'][$model->type_id];
                 },
             ],
-//            'type_id',
             [
                 'attribute' => 'status_id',
                 'value' => function($model){
                     return $this->params['allStatuses'][$model->status_id];
                 },
             ],
-//            'status_id',
             // 'edition',
             // 'description:ntext',
-            // 'last_update',
 
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {update} {delete} {harddelete}',
                 'buttons' => [
-                    /*'delete' => function ($url, $model, $key) {
-                        return true ? Html::a('Delete', $url) : '';
-                    },*/
                     'harddelete' => function ($url, $model, $key) {
                         return Html::a('<span class="glyphicon glyphicon-remove"></span>', $url, [
                             'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?') . ' ' .

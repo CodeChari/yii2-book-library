@@ -10,7 +10,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property integer $id
  * @property string $status
- * @property string $last_update
+ * @property string $created_at
  *
  * @property Book[] $books
  */
@@ -31,7 +31,7 @@ class Status extends \yii\db\ActiveRecord
     {
         return [
             [['status'], 'required'],
-            [['last_update'], 'safe'],
+            [['created_at'], 'safe'],
             [['status'], 'string', 'max' => 45]
         ];
     }
@@ -44,7 +44,7 @@ class Status extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'status' => Yii::t('app', 'Status'),
-            'last_update' => Yii::t('app', 'Last Update'),
+            'created_at' => Yii::t('app', 'Created At'),
         ];
     }
 

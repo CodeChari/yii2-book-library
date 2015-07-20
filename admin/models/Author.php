@@ -10,7 +10,8 @@ use Yii;
  * @property string $id
  * @property string $first_name
  * @property string $last_name
- * @property string $last_update
+ * @property string $updated_at
+ * @property string $created_at
  *
  * @property BookAuthor[] $bookAuthors
  * @property Book[] $books
@@ -33,7 +34,7 @@ class Author extends \yii\db\ActiveRecord
         return [
             [['first_name', 'last_name'], 'trim'],
             [['first_name', 'last_name'], 'required'],
-            [['last_update'], 'safe'],
+            [['updated_at', 'created_at'], 'safe'],
             [['first_name', 'last_name'], 'string', 'max' => 45]
         ];
     }
@@ -47,7 +48,8 @@ class Author extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'first_name' => Yii::t('app', 'First Name'),
             'last_name' => Yii::t('app', 'Last Name'),
-            'last_update' => Yii::t('app', 'Last Update'),
+            'updated_at' => Yii::t('app', 'Updated At'),
+            'created_at' => Yii::t('app', 'Created At'),
         ];
     }
 

@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $action
+ * @property string $created_at
  *
  * @property LogCrud[] $logCruds
  */
@@ -29,6 +30,7 @@ class CrudAction extends \yii\db\ActiveRecord
     {
         return [
             [['action'], 'required'],
+            [['created_at'], 'safe'],
             [['action'], 'string', 'max' => 20]
         ];
     }
@@ -41,6 +43,7 @@ class CrudAction extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'action' => Yii::t('app', 'Action'),
+            'created_at' => Yii::t('app', 'Created At'),
         ];
     }
 

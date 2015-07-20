@@ -11,11 +11,11 @@ use Yii;
  * @property string $name
  * @property string $details
  * @property string $address_id
- * @property string $last_update
+ * @property string $updated_at
+ * @property string $created_at
  *
- * @property Address $address
- * @property LibraryBook[] $libraryBooks
  * @property Book[] $books
+ * @property Address $address
  */
 class Library extends \yii\db\ActiveRecord
 {
@@ -33,9 +33,9 @@ class Library extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['address_id'], 'required'],
+            [['name'], 'required'],
             [['address_id'], 'integer'],
-            [['last_update'], 'safe'],
+            [['updated_at', 'created_at'], 'safe'],
             [['name', 'details'], 'string', 'max' => 45]
         ];
     }
@@ -50,8 +50,17 @@ class Library extends \yii\db\ActiveRecord
             'name' => Yii::t('app', 'Name'),
             'details' => Yii::t('app', 'Details'),
             'address_id' => Yii::t('app', 'Address ID'),
-            'last_update' => Yii::t('app', 'Last Update'),
+            'updated_at' => Yii::t('app', 'Updated At'),
+            'created_at' => Yii::t('app', 'Created At'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBooks()
+    {
+        return $this->hasMany(Book::className(), ['library_id' => 'id']);
     }
 
     /**
@@ -60,21 +69,5 @@ class Library extends \yii\db\ActiveRecord
     public function getAddress()
     {
         return $this->hasOne(Address::className(), ['id' => 'address_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLibraryBooks()
-    {
-        return $this->hasMany(LibraryBook::className(), ['library_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBooks()
-    {
-        return $this->hasMany(Book::className(), ['id' => 'book_id'])->viaTable('library_book', ['library_id' => 'id']);
     }
 }

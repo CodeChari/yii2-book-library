@@ -11,7 +11,8 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property integer $id
  * @property string $category_name
- * @property string $last_update
+ * @property string $updated_at
+ * @property string $created_at
  *
  * @property Book[] $books
  */
@@ -30,8 +31,8 @@ class Category extends \yii\db\ActiveRecord
         return [
             [
                 'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => false,//TODO: vlozit to book modelu aj created_at stlpec !!!
-                'updatedAtAttribute' => 'last_update',
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
                 'value' => new Expression('NOW()'),
 
             ],
@@ -45,8 +46,8 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             [['category_name'], 'required'],
-            [['last_update'], 'safe'],
-            [['category_name'], 'string', 'max' => 25]
+            [['updated_at', 'created_at'], 'safe'],
+            [['category_name'], 'string', 'max' => 255]
         ];
     }
 
@@ -58,7 +59,8 @@ class Category extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'category_name' => Yii::t('app', 'Category Name'),
-            'last_update' => Yii::t('app', 'Last Update'),
+            'updated_at' => Yii::t('app', 'Updated At'),
+            'created_at' => Yii::t('app', 'Created At'),
         ];
     }
 

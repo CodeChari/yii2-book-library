@@ -10,6 +10,7 @@ use Yii;
  * @property integer $id
  * @property string $code
  * @property string $name
+ * @property string $created_at
  *
  * @property Book[] $books
  */
@@ -29,8 +30,10 @@ class Language extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['name'], 'required'],
+            [['created_at'], 'safe'],
             [['code'], 'string', 'max' => 8],
-            [['name'], 'string', 'max' => 45]
+            [['name'], 'string', 'max' => 25]
         ];
     }
 
@@ -43,6 +46,7 @@ class Language extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'code' => Yii::t('app', 'Code'),
             'name' => Yii::t('app', 'Name'),
+            'created_at' => Yii::t('app', 'Created At'),
         ];
     }
 

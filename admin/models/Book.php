@@ -24,7 +24,8 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $category_id
  * @property integer $edition
  * @property string $description
- * @property string $last_update
+ * @property string $created_at
+ * @property string $updated_at
  *
  * @property Category $category
  * @property Language $language
@@ -37,6 +38,7 @@ use yii\behaviors\TimestampBehavior;
  * @property BookKeyWord[] $bookKeyWords
  * @property KeyWord[] $keyWords
  * @property LogCrud[] $logCruds
+ * @property RentalBook[] $rentalBooks
  * @property Rental[] $rentals
  */
 class Book extends \yii\db\ActiveRecord
@@ -83,7 +85,7 @@ class Book extends \yii\db\ActiveRecord
             ],
             [['description'], 'string'],
             [['description'], 'stripTags'],
-            [['last_update'], 'safe'],
+            [['updated_at', 'created_at'], 'safe'],
             [['internal_id'], 'string', 'max' => 11],
             [['name'], 'string', 'max' => 255],
             [['isbn', 'issn'], 'string', 'max' => 20],
@@ -98,8 +100,8 @@ class Book extends \yii\db\ActiveRecord
         return [
             [
                 'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => false,//TODO: vlozit to book modelu aj created_at stlpec !!!
-                'updatedAtAttribute' => 'last_update',
+                'createdAtAttribute' => 'created_at',//TODO: vlozit to book modelu aj created_at stlpec !!!
+                'updatedAtAttribute' => 'updated_at',
                 'value' => new Expression('NOW()'),
 
             ],
@@ -153,7 +155,8 @@ class Book extends \yii\db\ActiveRecord
             'category_id' => Yii::t('app', 'Category'),
             'edition' => Yii::t('app', 'Edition'),
             'description' => Yii::t('app', 'Description'),
-            'last_update' => Yii::t('app', 'Last Update'),
+            'updated_at' => Yii::t('app', 'Updated At'),
+            'created_at' => Yii::t('app', 'Created At'),
         ];
     }
 
@@ -272,8 +275,16 @@ class Book extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getRentalBooks()
+    {
+        return $this->hasMany(RentalBook::className(), ['book_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getRentals()
     {
-        return $this->hasMany(Rental::className(), ['book_id' => 'id']);
+        return $this->hasMany(Rental::className(), ['id' => 'rental_id'])->viaTable('rental_book', ['book_id' => 'id']);
     }
 }

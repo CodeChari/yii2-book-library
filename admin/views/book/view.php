@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Last update') ?></th>
-            <td><?= Yii::$app->formatter->asDatetime($modelBook->last_update) ?></td>
+            <td><?= Yii::$app->formatter->asDatetime($modelBook->updated_at) ?></td>
         </tr>
     </table>
 </div>

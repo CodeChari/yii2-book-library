@@ -9,7 +9,8 @@ use Yii;
  *
  * @property string $id
  * @property string $word
- * @property string $last_update
+ * @property string $updated_at
+ * @property string $created_at
  *
  * @property BookKeyWord[] $bookKeyWords
  * @property Book[] $books
@@ -30,21 +31,12 @@ class KeyWord extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['word'], 'trim'],
-            [['word'], 'required'],
+            ['word', 'trim'],
             ['word', 'stripTags'],
-            [['last_update'], 'safe'],
+            [['word'], 'required'],
+            [['updated_at', 'created_at'], 'safe'],
             [['word'], 'string', 'max' => 45]
         ];
-    }
-
-    /**
-     * strip HTML and php tags
-     * @return string
-     */
-    public function stripTags()
-    {
-        return strip_tags($this->word);
     }
 
     /**
@@ -55,8 +47,18 @@ class KeyWord extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'word' => Yii::t('app', 'Key Words'),
-            'last_update' => Yii::t('app', 'Last Update'),
+            'updated_at' => Yii::t('app', 'Updated At'),
+            'created_at' => Yii::t('app', 'Created At'),
         ];
+    }
+
+    /**
+     * strip HTML and php tags
+     * @return string
+     */
+    public function stripTags()
+    {
+        return strip_tags($this->word);
     }
 
     /**

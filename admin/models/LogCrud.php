@@ -11,7 +11,7 @@ use Yii;
  * @property string $user_id
  * @property integer $crud_action_id
  * @property string $book_id
- * @property string $last_update
+ * @property string $created_at
  *
  * @property Book $book
  * @property CrudAction $crudAction
@@ -35,7 +35,7 @@ class LogCrud extends \yii\db\ActiveRecord
         return [
             [['user_id', 'crud_action_id', 'book_id'], 'required'],
             [['user_id', 'crud_action_id', 'book_id'], 'integer'],
-            [['last_update'], 'safe']
+            [['created_at'], 'safe']
         ];
     }
 
@@ -49,7 +49,7 @@ class LogCrud extends \yii\db\ActiveRecord
             'user_id' => Yii::t('app', 'User ID'),
             'crud_action_id' => Yii::t('app', 'Crud Action ID'),
             'book_id' => Yii::t('app', 'Book ID'),
-            'last_update' => Yii::t('app', 'Last Update'),
+            'created_at' => Yii::t('app', 'Created At'),
         ];
     }
 

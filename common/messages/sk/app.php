@@ -42,7 +42,10 @@ return [
     'Category was deleted successfully.' => 'Kategória bola úspešne zmazaná.',
     'Category was created successfully.' => 'Kategória bola úspešne vytvorená.',
     '' => '',
-    '' => '',
+    //table: type
+    'corporate literature' => 'firemná literatúra',
+    'book' => 'kniha',
+    'magazine, newspaper' => 'časopis, noviny',
     '' => '',
     'Book was updated successfully.' => 'Kniha bola úspešne upravená.',
     'Book was not updated.' => 'Knihu sa nepodarilo upraviť.',

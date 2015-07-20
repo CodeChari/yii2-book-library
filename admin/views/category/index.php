@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             //'id',
             'category_name',
-            'last_update',
+            'updated_at',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',

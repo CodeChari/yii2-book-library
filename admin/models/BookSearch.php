@@ -19,7 +19,7 @@ class BookSearch extends Book
     {
         return [
             [['id', 'page_count', 'language_id', 'library_id', 'publisher_id', 'type_id', 'status_id', 'edition'], 'integer'],
-            [['internal_id', 'name', 'isbn', 'issn', 'description', 'last_update'], 'safe'],
+            [['internal_id', 'name', 'isbn', 'issn', 'description', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -66,7 +66,7 @@ class BookSearch extends Book
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
+            //'id' => $this->id,
             'page_count' => $this->page_count,
             'language_id' => $this->language_id,
             'library_id' => $this->library_id,
@@ -74,7 +74,7 @@ class BookSearch extends Book
             'type_id' => $this->type_id,
             //'status_id' => $this->status_id,
             'edition' => $this->edition,
-            'last_update' => $this->last_update,
+            //'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'internal_id', $this->internal_id])
