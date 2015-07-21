@@ -50,14 +50,14 @@ class BookSearch extends Book
         $this->load($params);
 
         //show all books where status != deleted
-        if($this->status_id === null){
+       /* if($this->status_id === null){
             //if(($status = Status::findOne(['status' => 'deleted'])) !== null){
                 $this->status_id = Yii::$app->params['status']['deleted'];
                 $query->andFilterWhere(['!=', 'status_id', $this->status_id]);
            //}
-        }else{
+        }else{*/
             $query->andFilterWhere(['status_id' => $this->status_id]);
-        }
+        /*}*/
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to any records when validation fails

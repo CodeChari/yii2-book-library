@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="pull-left">
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $modelBook->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Back'), Yii::$app->request->referrer ? Yii::$app->request->referrer : ['index'],
-            ['class' => 'btn']) ?>
+            ['class' => 'btn btn-default']) ?>
     </div>
     <div class="pull-right">
         <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $modelBook->id], [
@@ -37,24 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </div>
     <br><br><br>
-
-    <?= ''/*DetailView::widget([
-        'model' => $modelBook,
-        'attributes' => [
-            //'id',
-            'name',
-            'page_count',
-            'isbn',
-            'issn',
-            'language_id',
-            'publisher_id',
-            'type_id',
-            'status_id',
-            'edition',
-            'description:ntext',
-            'last_update',
-        ],
-    ]) */ ?>
 
     <table class="table table-striped table-bordered detail-view">
         <tr>

@@ -2,6 +2,7 @@
 
 namespace admin\models;
 
+use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -100,9 +101,12 @@ class BookForm
      * create record of book with all related parameters
      * already existing Author model is linked with book otherwise new Author model is created and linked,
      * the same with KeyWord model
+     * - if author or key word already exist new book is assigned to him, if not they are created
+     * - transaction is for consistent data (book, authors, key words)
      *
      * @param $modelsAuthor - reference to Author model
      * @param $modelsKeyWords - reference to KeyWord model
+     * @var $modelAuthor Author
      * @return bool - if creation si successful, otherwise false
      * @throws \yii\db\Exception
      */
@@ -112,17 +116,16 @@ class BookForm
         try {
             if ($flag = $this->modelBook->save(false)) {
 
-                //$this->modelBook->internal_id = $this->createBookInternalId($this->modelBook->id);
-                //$this->modelBook->update(false);
+                $this->createBookInternalId();
+                $this->modelBook->update(false);
+
                 //save authors
-                //todo: najst autora ak uz existuje a priradit mu knihu
                 foreach ($modelsAuthor as $modelAuthor) {
                     if (($existA = Author::findOne(['first_name' => $modelAuthor->first_name, 'last_name' => $modelAuthor->last_name])) !== null) {
                         $this->modelBook->link('authors', $existA);
                     } else {
                         if (!($flag = $modelAuthor->save(false))) {
-                            $transaction->rollBack();
-                            break;
+                            throw new Exception("Failed save new Authors in create Book model action.");
                         }
                         //link tables
                         $this->modelBook->link('authors', $modelAuthor);
@@ -130,14 +133,12 @@ class BookForm
                 }
                 //save keys
                 if ($flag) {
-                    //todo: to iste ako autor
                     foreach ($modelsKeyWords as $modelKeyWord) {
                         if (($existKey = KeyWord::findOne(['word' => $modelKeyWord->word])) !== null) {
                             $this->modelBook->link('keyWords', $existKey);
                         } else {
                             if (!($flag = $modelKeyWord->save(false))) {
-                                $transaction->rollBack();
-                                break;
+                                throw new Exception("Failed save key words in create book action.");
                             }
                             //link tables
                             $this->modelBook->link('keyWords', $modelKeyWord);
@@ -150,6 +151,7 @@ class BookForm
                 return true;
             }
         } catch (\Exception $e) {
+            \Yii::warning($e->getMessage());
             $transaction->rollBack();
             return false;
         }
@@ -157,9 +159,11 @@ class BookForm
     }
 
     /**
-     * update book
+     * update book and all related parameters
      * if unchanged Author already exist do nothing, otherwise delete all old authors and create new
      * the same with KeyWord-s
+     * - if author or key word already exist new book is assigned to him, if not they are created
+     * - transaction is for consistent data (book, authors, key words)
      *
      * @param Author[] $modelsAuthor
      * @param Author[] $modelsAuthorNew
@@ -167,7 +171,6 @@ class BookForm
      * @return bool - true if transaction(update) is successful otherwise false
      * @throws \yii\db\Exception
      */
-    //TODO: skontrolovat kde dat transactionRollback()
     public function updateBook($modelsAuthor, &$modelsAuthorNew, &$modelsKeyWordsNew)
     {
         $db = \Yii::$app->db;
@@ -183,7 +186,7 @@ class BookForm
                         }
                     }
                 }
-                //delete all unused (old) Authors(link table record), if model Author is the last one delete Author itself too
+                //delete all unused (old) Authors(link table record), if model Author is the last one, delete Author itself too
                 foreach ($modelsAuthor as $ma) {
                     $maid = $ma->id;
                     if (($count = $db->createCommand('SELECT COUNT(*) FROM book_author WHERE author_id = :author_id')->bindParam(':author_id', $maid)->queryScalar()) !== false) {
@@ -199,14 +202,13 @@ class BookForm
                         $this->modelBook->link('authors', $existA);
                     } else {
                         if (!($flag = $authorNew->save(false))) {
-                            $transaction->rollBack();
-                            break;
+                            throw new Exception("Failed save new Authors in update book model action.");
                         }
                         $this->modelBook->link('authors', $authorNew);
                     }
                 }
 
-                //filter unused KeyWords
+                //KeyWords - filter unchanged words
                 $keyWordIds = $this->modelBook->getKeyWords()->select('id')->asArray()->all();
                 $modelsKeyWords = KeyWord::findAll($keyWordIds);
                 foreach ($modelsKeyWordsNew as $keyWordNewKey => $keyWordNew) {
@@ -233,8 +235,7 @@ class BookForm
                             $this->modelBook->link('keyWords', $existKey);
                         } else {
                             if (!($flag = $keyWordNew->save(false))) {
-                                $transaction->rollBack();
-                                break;
+                                throw new Exception("Failed save key words in update book action.");
                             }
                             $this->modelBook->link('keyWords', $keyWordNew);
                         }
@@ -247,8 +248,8 @@ class BookForm
                 return true;
             }
 
-
         } catch (\Exception $e) {
+            \Yii::warning($e->getMessage());
             $transaction->rollBack();
             return false;
         }
@@ -257,17 +258,16 @@ class BookForm
 
     /**
      * create internal Book ID, format: padded book id to a length 11 with 0, "0000000022"
-     * @param $bookId
-     * @return string
      */
-    //TODO: spravit bez vstupneho parametra cez $this->id
-    public function createBookInternalId($bookId)
+    public function createBookInternalId()
     {
-        return str_pad($bookId, 11, '0', STR_PAD_LEFT);
+        $this->modelBook->internal_id = str_pad($this->modelBook->id, 11, '0', STR_PAD_LEFT);
     }
 
     /**
      * hard delete - delete all book data and related authors, keywords, logs, rentals, payments
+     * - entry (row) in tables: log_crud, rental, payment and categories FK-s referenced to book table are cascade deleted
+     *      On Delete: CASCADE
      *
      * @return bool - true if transaction (delete) is successful otherwise false
      * @throws \yii\db\Exception
@@ -277,7 +277,6 @@ class BookForm
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
         try {
-            //log_crud, rental, payment and categories FK-s referenced to book table On Delete: CASCADE
 
             //delete all related authors with only one book = this book
             $allAuthors = $this->modelBook->getAuthors()->select('id')->asArray()->all();
@@ -302,12 +301,19 @@ class BookForm
             $this->modelBook->delete();
             $transaction->commit();
         } catch (\Exception $e) {
+            \Yii::warning($e->getMessage());
             $transaction->rollBack();
             return false;
         }
         return true;
     }
 
+    /**
+     * get list of all errors of model Book in actionUpdate
+     *
+     * @param $modelsArray
+     * @return bool|string
+     */
     public static function getErrorsMessages(&$modelsArray)
     {
         $messages = '';

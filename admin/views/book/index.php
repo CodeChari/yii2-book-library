@@ -48,7 +48,6 @@ $this->params['allStatuses'] = $allStatuses;
             ],
             'isbn',
             'issn',
-            //TODO: ako dostat data z controlera do 'value' - parametrea funkcie
             [
                 'attribute' => 'type_id',
                 'value' => function($model){

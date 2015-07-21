@@ -32,10 +32,6 @@ class BookController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
-                        'allow' => true,
-                    ],
-                    [
                         'actions' => ['logout', 'index', 'view', 'create', 'update', 'delete', 'harddelete'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -113,14 +109,6 @@ class BookController extends Controller
                 // KeyWord[0]['word' =>'php']
                 Model::loadMultiple($modelsKeyWords, $wordsArray, '');
             }
-            /*if (Yii::$app->request->isAjax) {
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                return ArrayHelper::merge(
-                    ActiveForm::validateMultiple($modelsAuthor),
-                    ActiveForm::validateMultiple($modelsKeyWords),
-                    ActiveForm::validate($modelBook)
-                );
-            }*/
 
             //before validation we need insert fake internal_id
             $modelBook->internal_id = '00000000000';
@@ -131,7 +119,7 @@ class BookController extends Controller
 
             if ($valid && $modelBookForm->createBook($modelsAuthor, $modelsKeyWords)) {
                 $this->redirect(['view', 'id' => $modelBook->id]);
-            }//else ???
+            }
         }
 
         return $this->render('create', [
@@ -139,8 +127,8 @@ class BookController extends Controller
             'modelsAuthor' => (empty($modelsAuthor)) ? [new Author] : $modelsAuthor,
             'languageDropDownList' => BookForm::createArrayMap(Language::className(), 'id', 'name'),
             'publisherDropDownList' => BookForm::createArrayMap(Publisher::className(), 'id', 'name'),
-            'typeDropDownList' => BookForm::createArrayMap(Type::className(), 'id', 'type'),
-            'statusDropDownList' => BookForm::createArrayMap(Status::className(), 'id', 'status'),
+            'typeDropDownList' => (new Type)->getTypeNameArray(),
+            'statusDropDownList' => (new Status)->getStatusNameArray(),
             'categoryDropDownList' => BookForm::createArrayMap(Category::className(), 'id', 'category_name'),
             'libraryDropDownList' => BookForm::createArrayMap(Library::className(), 'id', 'name'),
 
@@ -192,14 +180,13 @@ class BookController extends Controller
             Yii::$app->session->addFlash('danger', Yii::t('app', 'Book was not updated.'));
         }
 
-        //Yii::$app->session->addFlash('danger', 'Error');
         return $this->render('update', [
             'modelBook' => $modelBook,
             'modelsAuthor' => (empty($modelsAuthor)) ? [new Author] : $modelsAuthor,
             'languageDropDownList' => BookForm::createArrayMap(Language::className(), 'id', 'name'),
             'publisherDropDownList' => BookForm::createArrayMap(Publisher::className(), 'id', 'name'),
-            'typeDropDownList' => BookForm::createArrayMap(Type::className(), 'id', 'type'),
-            'statusDropDownList' => BookForm::createArrayMap(Status::className(), 'id', 'status'),
+            'typeDropDownList' => (new Type)->getTypeNameArray(),//BookForm::createArrayMap(Type::className(), 'id', 'type'),
+            'statusDropDownList' => (new Status)->getStatusNameArray(),// BookForm::createArrayMap(Status::className(), 'id', 'status'),
             'libraryDropDownList' => BookForm::createArrayMap(Library::className(), 'id', 'name'),
             'categoryDropDownList' => BookForm::createArrayMap(Category::className(), 'id', 'category_name'),
             'keyWords' => $modelBookForm->getKeyWords(),
@@ -230,7 +217,6 @@ class BookController extends Controller
      */
     public function actionHarddelete($id)
     {
-        //$db = Yii::$app->db;
         $modelBook = $this->findModel($id);
         $modelBookForm = new BookForm($modelBook);
         if ($modelBookForm->deleteBook()) {

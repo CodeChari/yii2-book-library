@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'),
             ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Cancel'), Yii::$app->request->referrer ? Yii::$app->request->referrer : ['index'],
-            ['class' => 'btn']) ?>
+            ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -37,7 +37,7 @@ return [
             'translations' => [
                 'app*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@common/messages', //__DIR__ . '/../../common/messages'
+                    'basePath' => '@common/messages',
                     //'sourceLanguage' => 'en-US',
                     'fileMap' => [
                         'app' => 'app.php'

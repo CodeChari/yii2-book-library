@@ -81,7 +81,7 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($modelBook, 'publisher_id')->dropDownList($publisherDropDownList) ?>
 
-        <?= $form->field($modelBook, 'type_id')->dropDownList( $typeDropDownList) ?>
+        <?= $form->field($modelBook, 'type_id')->dropDownList($typeDropDownList) ?>
 
         <?= $form->field($modelBook, 'status_id')->dropDownList($statusDropDownList) ?>
 
@@ -100,11 +100,12 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($modelBook, 'description')->textarea(['rows' => 6]) ?>
 
-
         <div class="form-group">
             <?= Html::submitButton($modelBook->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'),
                 ['class' => $modelBook->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-            <?= Html::a(Yii::t('app', 'Cancel'), Yii::$app->request->referrer ? Yii::$app->request->referrer : ['index'], ['class' => 'btn']) ?>
+            <?= Html::a(Yii::t('app', 'Cancel'),
+                Yii::$app->request->referrer ? Yii::$app->request->referrer : ['index'],
+                ['class' => 'btn btn-default']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
@@ -113,13 +114,13 @@ use yii\widgets\ActiveForm;
 <?php
 
 $JS = '
-$(".dynamicform_wrapper").on("beforeInsert", function(e, item) {
+/*$(".dynamicform_wrapper").on("beforeInsert", function(e, item) {
     console.log("beforeInsert");
-});
+});*/
 
-$(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+/*$(".dynamicform_wrapper").on("afterInsert", function(e, item) {
     console.log("afterInsert");
-});
+});*/
 
 $(".dynamicform_wrapper").on("beforeDelete", function(e, item) {
     if (! confirm("' . Yii::t('app', 'Are you sure you want to delete this item?') . '")) {
@@ -128,9 +129,9 @@ $(".dynamicform_wrapper").on("beforeDelete", function(e, item) {
     return true;
 });
 
-$(".dynamicform_wrapper").on("afterDelete", function(e) {
+/*$(".dynamicform_wrapper").on("afterDelete", function(e) {
     console.log("' . Yii::t('app', 'Deleted item!') . '");
-});
+});*/
 
 $(".dynamicform_wrapper").on("limitReached", function(e, item) {
     alert("' . Yii::t('app', 'Limit reached') . '");
