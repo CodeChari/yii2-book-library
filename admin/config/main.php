@@ -10,7 +10,7 @@ return [
     'id' => 'app-admin',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'admin\controllers',
-    'language' => 'sk',
+    'language' => 'en',
     'bootstrap' => [
         'log',
         'common\models\settings'
@@ -27,6 +27,12 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                ],
+                [
+                    'class' => 'admin\models\DbTarget',
+                    'levels' => ['info'],
+                    'categories' => ['book'],
+                    'logTable' => 'log_book'
                 ],
             ],
         ],
