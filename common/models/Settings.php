@@ -35,9 +35,9 @@ class Settings implements BootstrapInterface
         }
 
         // Get crud actions from database
-        $status = CrudAction::find()->select(['id', 'action'])->asArray()->all();
+        /*$status = CrudAction::find()->select(['id', 'action'])->asArray()->all();
         foreach ($status as $s) {
             Yii::$app->params['crud_action'][$s['action']] = $s['id'];
-        }
+        }*/
     }
 }

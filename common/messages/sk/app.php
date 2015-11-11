@@ -44,6 +44,8 @@ return [
     'book' => 'kniha',
     'magazine, newspaper' => 'časopis, noviny',
     '' => '',
+    'Show Deleted Books' => 'Zobraziť zmazané knihy',
+    'Hide Deleted Books' => 'Skryť zmazané knihy',
     'Book was updated successfully.' => 'Kniha bola úspešne upravená.',
     'Book was not updated.' => 'Knihu sa nepodarilo upraviť.',
     'Book was not deleted.' => 'Knihu sa nepodarilo zmazať.',
@@ -63,4 +65,8 @@ return [
     'No' => 'Nie',
     'Yes' => 'Áno',
     'Save' => 'Ulož',
+    //page not found
+    'The requested page does not exist.' => 'Požadovaná stránka nebola nájdená.',
+    'The above error occurred while the Web server was processing your request.' => 'Nasledujúca chyba vznika počas toho, ako sa webový server snažil spracovať vašu požiadavku.',
+    'Please contact us if you think this is a server error. Thank you.' => 'Prosím kontaktujte nás, ak si myslíte, že je to chyba servera. Ďakujem.',
 ];
