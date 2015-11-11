@@ -3,6 +3,13 @@
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use \admin\models\BookForm;
+use \admin\models\Language;
+use \admin\models\Publisher;
+use \admin\models\Type;
+use \admin\models\Status;
+use \admin\models\Category;
+use \admin\models\Library;
 
 /* @var $this yii\web\View */
 /* @var $modelBook admin\models\Book */
@@ -77,17 +84,24 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($modelBook, 'page_count')->textInput() ?>
 
-        <?= $form->field($modelBook, 'language_id')->dropDownList($languageDropDownList) ?>
+        <?= $form->field($modelBook, 'language_id')->dropDownList(BookForm::createArrayMap(Language::className(), 'id',
+            'name')) ?>
 
-        <?= $form->field($modelBook, 'publisher_id')->dropDownList($publisherDropDownList) ?>
+        <?= $form->field($modelBook, 'publisher_id')->dropDownList(BookForm::createArrayMap(Publisher::className(),
+            'id', 'name')) ?>
 
-        <?= $form->field($modelBook, 'type_id')->dropDownList($typeDropDownList) ?>
+        <?= $form->field($modelBook, 'type_id')->dropDownList(BookForm::createArrayMapTranslate(Type::className(), 'id',
+            'type')) ?>
 
-        <?= $form->field($modelBook, 'status_id')->dropDownList($statusDropDownList) ?>
+        <?= $form->field($modelBook, 'status_id')->dropDownList(BookForm::createArrayMapTranslate(Status::className(),
+            'id', 'status')) ?>
 
-        <?= $form->field($modelBook, 'category_id')->dropDownList($categoryDropDownList) ?>
+        <?= $form->field($modelBook,
+            'category_id')->dropDownList(BookForm::createArrayMapTranslate(Category::className(), 'id',
+            'category_name')) ?>
 
-        <?= $form->field($modelBook, 'library_id')->dropDownList($libraryDropDownList) ?>
+        <?= $form->field($modelBook, 'library_id')->dropDownList(BookForm::createArrayMap(Library::className(), 'id',
+            'name')) ?>
 
         <?= $form->field($modelBook, 'edition')->textInput() ?>
 

@@ -41,9 +41,18 @@ class BookForm
      */
     public static function createArrayMap($class, $key, $value)
     {
-        $d = $class::find()->select([$key, $value])->asArray()->all();
+        $d = $class::find()->select([$key, $value])->orderBy([$value => SORT_ASC])->asArray()->all();
         $map = ArrayHelper::map($d, $key, $value);
         unset($d);
+        return $map;
+    }
+
+    public static function createArrayMapTranslate($class, $key, $value)
+    {
+        $map = self::createArrayMap($class, $key, $value);
+        foreach ($map as &$m) {
+            $m = \Yii::t('app', $m);
+        }
         return $map;
     }
 
@@ -266,7 +275,7 @@ class BookForm
 
     /**
      * hard delete - delete all book data and related authors, keywords, logs, rentals, payments
-     * - entry (row) in tables: log_crud, rental, payment and categories FK-s referenced to book table are cascade deleted
+     * - entry (row) in tables: log_book, rental_book, payment FK-s referenced to book table are cascade deleted
      *      On Delete: CASCADE
      *
      * @return bool - true if transaction (delete) is successful otherwise false

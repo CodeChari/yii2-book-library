@@ -60,8 +60,6 @@ class BookController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'allTypes' => (new Type())->getTypeNameArray(),
-            'allStatuses' => (new Status())->getStatusNameArray(),
         ]);
     }
 
@@ -78,13 +76,7 @@ class BookController extends Controller
         return $this->render('view', [
             'modelBook' => $modelBook,
             'authors' => $modelBookForm->getAuthors(),
-            'language' => $modelBook->getLanguageName(),
-            'publisher' => $modelBook->getPublisherName(),
-            'type' => $modelBook->getTypeName(),
-            'status' => $modelBook->getStatusName(),
-            'category' => $modelBook->getCategoryName(),
             'keyWords' => $modelBookForm->getKeyWords(),
-
         ]);
     }
 
@@ -118,6 +110,7 @@ class BookController extends Controller
             $valid = $wordsArray === false ? $valid : Model::validateMultiple($modelsKeyWords) && $valid;
 
             if ($valid && $modelBookForm->createBook($modelsAuthor, $modelsKeyWords)) {
+                Yii::info($modelBook->id . '_create', 'book');
                 $this->redirect(['view', 'id' => $modelBook->id]);
             }
         }
@@ -125,13 +118,6 @@ class BookController extends Controller
         return $this->render('create', [
             'modelBook' => $modelBook,
             'modelsAuthor' => (empty($modelsAuthor)) ? [new Author] : $modelsAuthor,
-            'languageDropDownList' => BookForm::createArrayMap(Language::className(), 'id', 'name'),
-            'publisherDropDownList' => BookForm::createArrayMap(Publisher::className(), 'id', 'name'),
-            'typeDropDownList' => (new Type)->getTypeNameArray(),
-            'statusDropDownList' => (new Status)->getStatusNameArray(),
-            'categoryDropDownList' => BookForm::createArrayMap(Category::className(), 'id', 'category_name'),
-            'libraryDropDownList' => BookForm::createArrayMap(Library::className(), 'id', 'name'),
-
         ]);
     }
 
@@ -166,6 +152,7 @@ class BookController extends Controller
 
             if ($valid && $modelBookForm->updateBook($modelsAuthor, $modelsAuthorNew, $modelsKeyWordsNew)) {
                 Yii::$app->session->setFlash('success', Yii::t('app', Yii::t('app', 'Book was updated successfully.')));
+                Yii::info($id . '_update', 'book');
 
                 return $this->redirect(['view', 'id' => $modelBook->id]);
             } else {
@@ -183,12 +170,6 @@ class BookController extends Controller
         return $this->render('update', [
             'modelBook' => $modelBook,
             'modelsAuthor' => (empty($modelsAuthor)) ? [new Author] : $modelsAuthor,
-            'languageDropDownList' => BookForm::createArrayMap(Language::className(), 'id', 'name'),
-            'publisherDropDownList' => BookForm::createArrayMap(Publisher::className(), 'id', 'name'),
-            'typeDropDownList' => (new Type)->getTypeNameArray(),//BookForm::createArrayMap(Type::className(), 'id', 'type'),
-            'statusDropDownList' => (new Status)->getStatusNameArray(),// BookForm::createArrayMap(Status::className(), 'id', 'status'),
-            'libraryDropDownList' => BookForm::createArrayMap(Library::className(), 'id', 'name'),
-            'categoryDropDownList' => BookForm::createArrayMap(Category::className(), 'id', 'category_name'),
             'keyWords' => $modelBookForm->getKeyWords(),
         ]);
     }
@@ -204,6 +185,7 @@ class BookController extends Controller
         $book = $this->findModel($id);
         $book->status_id = Yii::$app->params['status']['deleted'];
         $book->update(false);
+        Yii::info($id . '_delete', 'book');
         Yii::$app->session->addFlash('success', Yii::t('app', 'Book was deleted successfully.'));
 
         return $this->redirect(['index']);
@@ -220,6 +202,7 @@ class BookController extends Controller
         $modelBook = $this->findModel($id);
         $modelBookForm = new BookForm($modelBook);
         if ($modelBookForm->deleteBook()) {
+            Yii::info($id . '_harddelete', 'book');
             Yii::$app->session->addFlash('success', Yii::t('app', 'Book was deleted successfully.'));
             $this->redirect(['index']);
         } else {
@@ -240,7 +223,7 @@ class BookController extends Controller
         if (($model = Book::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
     }
 }

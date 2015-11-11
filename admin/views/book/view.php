@@ -67,23 +67,23 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Language') ?></th>
-            <td><?= $language ?></td>
+            <td><?= $modelBook->language->name ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Publisher') ?></th>
-            <td><?= Html::encode($publisher) ?></td>
+            <td><?= Html::encode($modelBook->publisher->name) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Type') ?></th>
-            <td><?= $type ?></td>
+            <td><?= Yii::t('app', $modelBook->type->type) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Status') ?></th>
-            <td><?= $status ?></td>
+            <td><?= Yii::t('app',$modelBook->status->status) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Category') ?></th>
-            <td><?= Html::encode($category) ?></td>
+            <td><?= Html::encode($modelBook->category->category_name) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Edition') ?></th>

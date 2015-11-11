@@ -100,13 +100,14 @@ class Book extends \yii\db\ActiveRecord
         return [
             [
                 'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_at',//TODO: vlozit to book modelu aj created_at stlpec !!!
+                'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
                 'value' => new Expression('NOW()'),
 
             ],
         ];
     }
+
     /**
      * strip HTML and php tags
      * @return string
@@ -168,10 +169,11 @@ class Book extends \yii\db\ActiveRecord
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
-    public function getCategoryName()
+    /*public function getCategoryName()
     {
         return $this->getCategory()->asArray()->one()['category_name'];
-    }
+    }*/
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -218,6 +220,7 @@ class Book extends \yii\db\ActiveRecord
     {
         return Yii::t('app', $this->getStatus()->asArray()->one()['status']);
     }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -226,10 +229,10 @@ class Book extends \yii\db\ActiveRecord
         return $this->hasOne(Type::className(), ['id' => 'type_id']);
     }
 
-    public function getTypeName()
+    /*public function getTypeName()
     {
         return Yii::t('app', $this->getType()->asArray()->one()['type']);
-    }
+    }*/
 
     /**
      * @return \yii\db\ActiveQuery

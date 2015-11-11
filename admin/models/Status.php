@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property integer $id
  * @property string $status
+ * @property string $status_sk
  * @property string $created_at
  *
  * @property Book[] $books
@@ -56,7 +57,7 @@ class Status extends \yii\db\ActiveRecord
         return $this->hasMany(Book::className(), ['status_id' => 'id']);
     }
 
-    public function getStatusNameArray()
+    /*public function getStatusNameArray()
     {
         $allStats = Status::find()->select(['id', 'status'])->asArray()->all();
         $map = ArrayHelper::map($allStats, 'id', 'status');
@@ -64,5 +65,5 @@ class Status extends \yii\db\ActiveRecord
             $m = Yii::t('app', $m);
         }
         return $map;
-    }
+    }*/
 }

@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property integer $id
  * @property string $type
+ * @property string $type_sk
  * @property string $created_at
  *
  * @property Book[] $books
@@ -56,7 +57,11 @@ class Type extends \yii\db\ActiveRecord
         return $this->hasMany(Book::className(), ['type_id' => 'id']);
     }
 
-    public function getTypeNameArray()
+    /**
+     * data for drop down (create, update Book)
+     * @return array
+     */
+    /*public function getTypeNameArray()
     {
         $allTypes = Type::find()->select(['id', 'type'])->asArray()->all();
         $map = ArrayHelper::map($allTypes, 'id', 'type');
@@ -64,5 +69,5 @@ class Type extends \yii\db\ActiveRecord
             $m = Yii::t('app', $m);
         }
         return $map;
-    }
+    }*/
 }

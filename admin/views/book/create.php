@@ -17,13 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', [
         'modelBook' => $modelBook,
         'modelsAuthor' => $modelsAuthor,
-        'languageDropDownList' => $languageDropDownList,
-        'publisherDropDownList' => $publisherDropDownList,
-        'typeDropDownList' => $typeDropDownList,
-        'statusDropDownList' => $statusDropDownList,
-        'categoryDropDownList' => $categoryDropDownList,
-        'libraryDropDownList' => $libraryDropDownList,
-
     ]) ?>
 
 </div>
