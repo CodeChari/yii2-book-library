@@ -44,15 +44,24 @@ class BookForm
         $d = $class::find()->select([$key, $value])->orderBy([$value => SORT_ASC])->asArray()->all();
         $map = ArrayHelper::map($d, $key, $value);
         unset($d);
+
         return $map;
     }
 
+    /**
+     * Translate a value from key-value array
+     * @param $class -  name class => table
+     * @param $key - column from table
+     * @param $value - column from table
+     * @return array
+     */
     public static function createArrayMapTranslate($class, $key, $value)
     {
         $map = self::createArrayMap($class, $key, $value);
         foreach ($map as &$m) {
             $m = \Yii::t('app', $m);
         }
+
         return $map;
     }
 
@@ -67,6 +76,7 @@ class BookForm
         foreach ($keyW as $kw) {
             $keyWords[] = $kw['word'];
         }
+
         return implode(', ', $keyWords);
     }
 
@@ -81,6 +91,7 @@ class BookForm
         foreach ($authors as $a) {
             $allAuthors[] = $a['first_name'] . ' ' . $a['last_name'];
         }
+
         return implode(', ', $allAuthors);
     }
 
@@ -103,6 +114,7 @@ class BookForm
                 $wordsArray[] = ['word' => $word];
             }
         }
+
         return empty($wordsArray) ? false : $wordsArray;
     }
 
@@ -130,7 +142,11 @@ class BookForm
 
                 //save authors
                 foreach ($modelsAuthor as $modelAuthor) {
-                    if (($existA = Author::findOne(['first_name' => $modelAuthor->first_name, 'last_name' => $modelAuthor->last_name])) !== null) {
+                    if (($existA = Author::findOne([
+                            'first_name' => $modelAuthor->first_name,
+                            'last_name' => $modelAuthor->last_name
+                        ])) !== null
+                    ) {
                         $this->modelBook->link('authors', $existA);
                     } else {
                         if (!($flag = $modelAuthor->save(false))) {
@@ -157,13 +173,16 @@ class BookForm
             }
             if ($flag) {
                 $transaction->commit();
+
                 return true;
             }
         } catch (\Exception $e) {
             \Yii::warning($e->getMessage());
             $transaction->rollBack();
+
             return false;
         }
+
         return false;
     }
 
@@ -198,8 +217,11 @@ class BookForm
                 //delete all unused (old) Authors(link table record), if model Author is the last one, delete Author itself too
                 foreach ($modelsAuthor as $ma) {
                     $maid = $ma->id;
-                    if (($count = $db->createCommand('SELECT COUNT(*) FROM book_author WHERE author_id = :author_id')->bindParam(':author_id', $maid)->queryScalar()) !== false) {
-                        $db->createCommand()->delete('book_author', ['author_id' => $ma->id, 'book_id' => $this->modelBook->id])->execute();
+                    if (($count = $db->createCommand('SELECT COUNT(*) FROM book_author WHERE author_id = :author_id')->bindParam(':author_id',
+                            $maid)->queryScalar()) !== false
+                    ) {
+                        $db->createCommand()->delete('book_author',
+                            ['author_id' => $ma->id, 'book_id' => $this->modelBook->id])->execute();
                         if ($count == 1) {
                             $ma->delete();
                         }
@@ -207,7 +229,11 @@ class BookForm
                 }
                 //add new Authors
                 foreach ($modelsAuthorNew as $authorNew) {
-                    if (($existA = Author::findOne(['first_name' => $authorNew->first_name, 'last_name' => $authorNew->last_name])) !== null) {
+                    if (($existA = Author::findOne([
+                            'first_name' => $authorNew->first_name,
+                            'last_name' => $authorNew->last_name
+                        ])) !== null
+                    ) {
                         $this->modelBook->link('authors', $existA);
                     } else {
                         if (!($flag = $authorNew->save(false))) {
@@ -230,8 +256,11 @@ class BookForm
                 //delete all old KeyWords
                 foreach ($modelsKeyWords as $mkw) {
                     $mkwid = $mkw->id;
-                    if (($count = $db->createCommand('SELECT COUNT(*) FROM book_key_word WHERE key_word_id = :key_word_id')->bindParam(':key_word_id', $mkwid)->queryScalar()) !== false) {
-                        $db->createCommand()->delete('book_key_word', ['key_word_id' => $mkw->id, 'book_id' => $this->modelBook->id])->execute();
+                    if (($count = $db->createCommand('SELECT COUNT(*) FROM book_key_word WHERE key_word_id = :key_word_id')->bindParam(':key_word_id',
+                            $mkwid)->queryScalar()) !== false
+                    ) {
+                        $db->createCommand()->delete('book_key_word',
+                            ['key_word_id' => $mkw->id, 'book_id' => $this->modelBook->id])->execute();
                         if ($count == 1) {
                             $mkw->delete();
                         }
@@ -254,14 +283,17 @@ class BookForm
             }
             if ($flag) {
                 $transaction->commit();
+
                 return true;
             }
 
         } catch (\Exception $e) {
             \Yii::warning($e->getMessage());
             $transaction->rollBack();
+
             return false;
         }
+
         return false;
     }
 
@@ -290,8 +322,11 @@ class BookForm
             //delete all related authors with only one book = this book
             $allAuthors = $this->modelBook->getAuthors()->select('id')->asArray()->all();
             foreach ($allAuthors as $aa) {
-                if (($count = $db->createCommand('SELECT COUNT(*) FROM book_author WHERE author_id = :author_id')->bindParam(':author_id', $aa['id'])->queryScalar()) !== false) {
-                    $db->createCommand()->delete('book_author', ['author_id' => $aa['id'], 'book_id' => $this->modelBook->id])->execute();
+                if (($count = $db->createCommand('SELECT COUNT(*) FROM book_author WHERE author_id = :author_id')->bindParam(':author_id',
+                        $aa['id'])->queryScalar()) !== false
+                ) {
+                    $db->createCommand()->delete('book_author',
+                        ['author_id' => $aa['id'], 'book_id' => $this->modelBook->id])->execute();
                     if ($count == 1) {
                         $db->createCommand()->delete('author', ['id' => $aa['id']])->execute();
                     }
@@ -299,8 +334,11 @@ class BookForm
             }
             $allKWords = $this->modelBook->getKeyWords()->select('id')->asArray()->all();
             foreach ($allKWords as $kw) {
-                if (($count = $db->createCommand('SELECT COUNT(*) FROM book_key_word WHERE key_word_id = :key_word_id')->bindParam(':key_word_id', $kw['id'])->queryScalar()) !== false) {
-                    $db->createCommand()->delete('book_key_word', ['key_word_id' => $kw['id'], 'book_id' => $this->modelBook->id])->execute();
+                if (($count = $db->createCommand('SELECT COUNT(*) FROM book_key_word WHERE key_word_id = :key_word_id')->bindParam(':key_word_id',
+                        $kw['id'])->queryScalar()) !== false
+                ) {
+                    $db->createCommand()->delete('book_key_word',
+                        ['key_word_id' => $kw['id'], 'book_id' => $this->modelBook->id])->execute();
                     if ($count == 1) {
                         $db->createCommand()->delete('key_word', ['id' => $kw['id']])->execute();
                     }
@@ -312,8 +350,10 @@ class BookForm
         } catch (\Exception $e) {
             \Yii::warning($e->getMessage());
             $transaction->rollBack();
+
             return false;
         }
+
         return true;
     }
 
@@ -329,11 +369,12 @@ class BookForm
         foreach ($modelsArray as $model) {
             if ($model->hasErrors()) {
                 $errors = $model->getErrors();
-                foreach ($errors as $attributeName => $attrErrors) {
+                foreach ($errors as $attrErrors) {
                     $messages .= implode(', <br>', $attrErrors) . '<br>';
                 }
             }
         }
+
         return $messages === '' ? false : $messages;
     }
 }

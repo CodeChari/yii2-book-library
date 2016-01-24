@@ -6,14 +6,8 @@ use admin\models\Author;
 use admin\models\Book;
 use admin\models\BookForm;
 use admin\models\BookSearch;
-use admin\models\Category;
 use admin\models\KeyWord;
-use admin\models\Language;
-use admin\models\Library;
 use admin\models\Model;
-use admin\models\Publisher;
-use admin\models\Status;
-use admin\models\Type;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -126,7 +120,7 @@ class BookController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @var Author[] $modelsAuthorNew
-     * @param string $id
+     * @param string $id Book id
      * @return mixed
      */
     public function actionUpdate($id)
@@ -160,7 +154,7 @@ class BookController extends Controller
                 if (($msg = BookForm::getErrorsMessages($modelsAuthorNew)) !== false) {
                     Yii::$app->session->addFlash('danger', $msg);
                 }
-                if (($msg = $errorsWord = BookForm::getErrorsMessages($modelsKeyWordsNew)) !== false) {
+                if (($msg = BookForm::getErrorsMessages($modelsKeyWordsNew)) !== false) {
                     Yii::$app->session->addFlash('danger', $msg);
                 }
             }
@@ -204,11 +198,13 @@ class BookController extends Controller
         if ($modelBookForm->deleteBook()) {
             Yii::info($id . '_harddelete', 'book');
             Yii::$app->session->addFlash('success', Yii::t('app', 'Book was deleted successfully.'));
-            $this->redirect(['index']);
-        } else {
-            Yii::$app->session->addFlash('danger', Yii::t('app', 'Book was not deleted.'));
-            $this->redirect(['view', 'id' => $modelBook->id]);
+
+            return $this->redirect(['index']);
         }
+        Yii::$app->session->addFlash('danger', Yii::t('app', 'Book was not deleted.'));
+
+        return $this->redirect(['view', 'id' => $modelBook->id]);
+
     }
 
     /**
@@ -227,3 +223,4 @@ class BookController extends Controller
         }
     }
 }
+

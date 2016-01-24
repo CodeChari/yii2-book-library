@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $modelBook admin\models\Book */
@@ -79,15 +78,19 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Status') ?></th>
-            <td><?= Yii::t('app',$modelBook->status->status) ?></td>
+            <td><?= Yii::t('app', $modelBook->status->status) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Category') ?></th>
-            <td><?= Html::encode($modelBook->category->category_name) ?></td>
+            <td><?= isset($modelBook->category) ? Html::encode($modelBook->category->category_name) : '' ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Edition') ?></th>
             <td><?= Html::encode($modelBook->edition) ?></td>
+        </tr>
+        <tr>
+            <th><?= Yii::t('app', 'Year') ?></th>
+            <td><?= Html::encode($modelBook->year) ?></td>
         </tr>
         <tr>
             <th><?= Yii::t('app', 'Key Words') ?></th>

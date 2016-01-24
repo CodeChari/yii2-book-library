@@ -1,15 +1,15 @@
 <?php
 
+use admin\models\BookForm;
+use admin\models\Category;
+use admin\models\Language;
+use admin\models\Library;
+use admin\models\Publisher;
+use admin\models\Status;
+use admin\models\Type;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use \admin\models\BookForm;
-use \admin\models\Language;
-use \admin\models\Publisher;
-use \admin\models\Type;
-use \admin\models\Status;
-use \admin\models\Category;
-use \admin\models\Library;
 
 /* @var $this yii\web\View */
 /* @var $modelBook admin\models\Book */
@@ -104,6 +104,8 @@ use \admin\models\Library;
             'name')) ?>
 
         <?= $form->field($modelBook, 'edition')->textInput() ?>
+
+        <?= $form->field($modelBook, 'year')->widget(yii\widgets\MaskedInput::classname(), ['mask' => '9999']); ?>
 
         <div class="form-group">
             <label class="control-label" for="book-key-words"><?= Yii::t('app', 'Key Words') . ' (' . Yii::t('app',

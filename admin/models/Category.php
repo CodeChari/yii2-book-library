@@ -3,16 +3,17 @@
 namespace admin\models;
 
 use Yii;
-use yii\db\Expression;
 use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "category".
  *
  * @property integer $id
  * @property string $category_name
- * @property string $updated_at
  * @property string $created_at
+ * @property string $updated_at
+ * @property string $deleted
  *
  * @property Book[] $books
  */
@@ -40,15 +41,24 @@ class Category extends \yii\db\ActiveRecord
     }
 
     /**
+     * Validation rules
      * @inheritdoc
      */
     public function rules()
     {
         return [
             [['category_name'], 'required'],
-            [['updated_at', 'created_at'], 'safe'],
+            [['updated_at', 'created_at', 'deleted'], 'safe'],
             [['category_name'], 'string', 'max' => 255]
         ];
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public static function find()
+    {
+        return parent::find()->where([self::tableName() . '.deleted' => null]);
     }
 
     /**

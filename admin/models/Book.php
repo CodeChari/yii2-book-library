@@ -4,8 +4,8 @@ namespace admin\models;
 
 use Isbn\Isbn;
 use Yii;
-use yii\db\Expression;
 use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "book".
@@ -23,6 +23,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $status_id
  * @property integer $category_id
  * @property integer $edition
+ * @property integer $year
  * @property string $description
  * @property string $created_at
  * @property string $updated_at
@@ -52,6 +53,7 @@ class Book extends \yii\db\ActiveRecord
     }
 
     /**
+     * Validation rules
      * @inheritdoc
      */
     public function rules()
@@ -79,7 +81,8 @@ class Book extends \yii\db\ActiveRecord
                     'type_id',
                     'status_id',
                     'category_id',
-                    'edition'
+                    'edition',
+                    'year'
                 ],
                 'integer'
             ],
@@ -90,7 +93,8 @@ class Book extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 255],
             [['isbn', 'issn'], 'string', 'max' => 20],
             [['isbn', 'issn'], 'validateISBN'],
-            [['internal_id'], 'unique']
+            [['internal_id'], 'unique'],
+            [['year'], 'integer', 'max' => 2999, 'min' => 1900],
         ];
     }
 
@@ -103,7 +107,6 @@ class Book extends \yii\db\ActiveRecord
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
                 'value' => new Expression('NOW()'),
-
             ],
         ];
     }
@@ -117,6 +120,9 @@ class Book extends \yii\db\ActiveRecord
         return strip_tags($this->description);
     }
 
+    /**
+     * Validate correct ISBN/ISSN format
+     */
     public function validateISBN()
     {
         $isbn = new Isbn();
@@ -155,6 +161,7 @@ class Book extends \yii\db\ActiveRecord
             'status_id' => Yii::t('app', 'Status'),
             'category_id' => Yii::t('app', 'Category'),
             'edition' => Yii::t('app', 'Edition'),
+            'year' => Yii::t('app', 'Year'),
             'description' => Yii::t('app', 'Description'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'created_at' => Yii::t('app', 'Created At'),
@@ -239,7 +246,7 @@ class Book extends \yii\db\ActiveRecord
      */
     public function getBookAuthors()
     {
-        return $this->hasMany(BookAuthor::className(), ['book_id' => 'id']);
+        return $this->hasMany(BookAutho::className(), ['book_id' => 'id']);
     }
 
     /**
@@ -265,14 +272,6 @@ class Book extends \yii\db\ActiveRecord
     {
         return $this->hasMany(KeyWord::className(), ['id' => 'key_word_id'])->viaTable('book_key_word',
             ['book_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLogCruds()
-    {
-        return $this->hasMany(LogCrud::className(), ['book_id' => 'id']);
     }
 
     /**

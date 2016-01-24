@@ -100,7 +100,10 @@ class CategoryController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $category = $this->findModel($id);
+        $category->deleted = 1;
+        $category->update(false);
+
         Yii::$app->session->addFlash('success', Yii::t('app', 'Category was deleted successfully.'));
 
         return $this->redirect(['index']);

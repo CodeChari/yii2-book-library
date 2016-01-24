@@ -29,6 +29,7 @@ return [
     'Last Name' => 'Priezvisko',
     'Limit reached' => 'Dosiahnutý limit',
     'Updated At' => 'Zmenené',
+    'Year' => 'Rok',
     '' => '',
     'free' => 'voľná',
     'lent' => 'požičaná',
