@@ -13,7 +13,7 @@ return [
     'language' => 'en',
     'bootstrap' => [
         'log',
-        'common\models\settings'
+        'common\models\Settings'
     ],
     'modules' => [],
     'components' => [
